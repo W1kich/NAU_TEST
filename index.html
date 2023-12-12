@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>DataTable test</title>
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+		<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.4.js"></script>
+		<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+</head>
+<body>
+
+<table id="test" class="display">
+		<thead>
+				<tr>
+						<th>#</th>
+						<th>Name</th>
+						<th>Text</th>
+						<th>Tools</th>
+				</tr>
+		</thead>
+		<tbody>
+				<!-- Your data will go here -->
+				<tr>
+						<td>1</td>
+						
+						<td><span class="editable" contenteditable="false">John Doe</span></td>
+						<td><span class="editable" contenteditable="false">Lorem ipsum</span></td>
+						<td><button class="editBtn">Edit</button><button class="saveBtn" style="display: none;">Save</button><button class="deleteBtn">Delete</button></td>
+				</tr>
+				<tr>
+						<td>2</td>
+						<td><span class="editable" contenteditable="false">Jane Smith</span></td>
+						<td><span class="editable" contenteditable="false">Dolor sit amet</span></td>
+						<td><button class="editBtn">Edit</button><button class="saveBtn" style="display: none;">Save</button><button class="deleteBtn">Delete</button></td>
+				</tr>
+		</tbody>
+</table>
+
+<button id="addBtn">Add entries</button>
+
+<script>
+		$(document).ready(function() {
+				// Initialize DataTable
+				var table = $('#test').DataTable({
+						responsive: true
+				});
+
+				// Edit button click event
+				$('#test tbody').on('click', '.editBtn', function () {
+						var row = $(this).closest('tr');
+						var data = table.row(row).data();
+						
+						// Enable contenteditable for editable spans
+						row.find('.editable').attr('contenteditable', true);
+
+						// Show Save button and hide Edit button
+						row.find('.saveBtn').show();
+						row.find('.editBtn').hide();
+				});
+
+				// Save button click event
+				$('#test tbody').on('click', '.saveBtn', function () {
+						var row = $(this).closest('tr');
+						var data = table.row(row).data();
+
+						// Disable contenteditable for editable spans
+						row.find('.editable').attr('contenteditable', false);
+
+						// Hide Save button and show Edit button
+						row.find('.saveBtn').hide();
+						row.find('.editBtn').show();
+				});
+
+				// Delete button click event
+				$('#test tbody').on('click', '.deleteBtn', function () {
+						var row = $(this).closest('tr');
+						table.row(row).remove().draw();
+				});
+
+				// Add button click event
+				$('#addBtn').on('click', function () {
+						var newData = [table.data().length + 1, '<span class="editable" contenteditable="false">Enter name</span>', '<span class="editable" contenteditable="false">Enter text</span>', '<button class="editBtn">Edit</button><button class="saveBtn" style="display: none;">Save</button><button class="deleteBtn">Delete</button>'];
+						table.row.add(newData).draw();
+				});
+		});
+</script>
+
+</body>
+</html>
